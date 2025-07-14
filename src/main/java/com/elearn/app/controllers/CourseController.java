@@ -2,6 +2,7 @@ package com.elearn.app.controllers;
 
 
 import com.elearn.app.config.AppConstant;
+import com.elearn.app.custom_annotations.ValidImageContentType;
 import com.elearn.app.dtos.*;
 import com.elearn.app.services.CourseService;
 import com.elearn.app.services.FileService;
@@ -10,11 +11,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/api/v1/courses")
 public class CourseController {
@@ -143,10 +146,22 @@ public class CourseController {
     private FileService fileService;
 
     @PostMapping("/{courseId}/banners")
-    public ResponseEntity<CourseDto> uploadBanner(
+    public ResponseEntity<?> uploadBanner(
         @PathVariable("courseId")   String courseId,
-        @RequestParam("banner")  MultipartFile file
+        @ValidImageContentType @RequestParam("banner")  MultipartFile file
     ){
+
+//        String contentType=file.getContentType();
+
+        // instead of using if-else ,we can use our custom validation annotation on dto field or on controllers parameter.
+//        if(contentType!= null && !contentType.equalsIgnoreCase("image/png") && !contentType.equalsIgnoreCase("image/jpeg")){
+//
+//            CustomeMessage customeMessage=new CustomeMessage();
+//            customeMessage.setMessage("file format not accepted. use only png/jpg image");
+//            customeMessage.setSuccess(false);
+//
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(customeMessage);
+//        }
 
 
         CourseDto courseDto = courseService.saveBanner(file, courseId);

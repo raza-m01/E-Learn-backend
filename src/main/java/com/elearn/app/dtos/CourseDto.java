@@ -38,4 +38,11 @@ public class CourseDto {
 //    @JsonIgnore
 //    private List<CategoryDto> categoryList=new ArrayList<>();
 
+
+    public String getBannerUrl(){
+
+        return "http://localhost:8082/api/v1/courses/"+courseId+"/banners";
+
+    }
+
 }

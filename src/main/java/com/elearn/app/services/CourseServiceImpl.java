@@ -185,10 +185,15 @@ public class CourseServiceImpl implements CourseService{
     public CourseDto saveBanner(MultipartFile file, String courseId) {
 
         Course course = courseRepo.findById(courseId).orElseThrow(() -> new ResourseNotFoundException("Course not found!!"));
+
+        // saving file at the given path, it will return the full file path after saving
         String filePath = fileService.saveFile(file, AppConstant.COURSE_BANNER_UPLOAD_DIR, file.getOriginalFilename());
+
+        // setting the file path in course dto
         course.setCourseBannerFilePath(filePath);
         course.setBannerContentType(file.getContentType());
 
+        // saving the course dto to database
         Course savedCourse = courseRepo.save(course);
 
         return modelMapper.map(savedCourse,CourseDto.class);
